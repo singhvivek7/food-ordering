@@ -1,11 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import CustomButton from '@/components/CustomButton';
+import { Link, Stack } from 'expo-router';
+import { StyleSheet, View } from 'react-native';
 
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <Stack.Screen options={{ title: 'Home' }} />
+      <Link
+        href="/checkout"
+        asChild
+        style={{ marginTop: 'auto', marginBottom: 20 }}>
+        <CustomButton title="Checkout" />
+      </Link>
     </View>
   );
 }
@@ -13,8 +19,19 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    borderRadius: 5,
+    backgroundColor: 'blue',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  text: {
+    color: 'white',
   },
 });
