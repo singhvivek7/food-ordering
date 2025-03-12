@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { View, Text } from '@/components/general/Themed';
+import { View } from '@/components/general/Themed';
 import CustomButton from '@/components/general/CustomButton';
 import WorkoutListItem from '@/components/workouts/WorkoutListItem';
 import workouts from '@/data/dummyWorkouts';
@@ -13,8 +13,7 @@ export default function HomeScreen() {
         gap: 10,
         padding: 10,
         backgroundColor: 'transparent',
-      }}
-    >
+      }}>
       <Link href="/workout/current" asChild>
         <CustomButton title="Resume workout" />
       </Link>
