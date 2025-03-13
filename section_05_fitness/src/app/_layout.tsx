@@ -8,12 +8,25 @@ import {
 import Colors from '@/constants/Colors';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
+import * as SQLite from 'expo-sqlite';
+import { dbName } from '@/db';
+import { useWorkouts } from '@/store';
+import { useEffect } from 'react';
+
+const db = SQLite.openDatabaseSync(dbName);
 
 DarkTheme.colors.primary = Colors.dark.tint;
 DefaultTheme.colors.primary = Colors.light.tint;
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  useDrizzleStudio(db);
+  const loadWorkouts = useWorkouts(state => state.loadWorkouts);
+
+  useEffect(() => {
+    loadWorkouts();
+  }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
