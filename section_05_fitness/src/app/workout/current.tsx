@@ -1,15 +1,22 @@
-import { View, Text } from '@/components/general/Themed';
 import WorkoutExerciseItem from '@/components/logger/WorkoutExerciseItem';
 import { FlatList, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { useHeaderHeight } from '@react-navigation/elements';
-import { Stack } from 'expo-router';
+import { Redirect, Stack } from 'expo-router';
 import CustomButton from '@/components/general/CustomButton';
 import WorkoutHeader from '@/components/logger/WorkoutHeader';
 import SelectExerciseModal from '@/components/logger/SelectExerciseModal';
+import { useWorkouts } from '@/store';
 
 export default function CurrentWorkoutScreen() {
   const headerHeight = useHeaderHeight();
+  const currentWorkout = useWorkouts(state => state.currentWorkout);
+  const finishWorkout = useWorkouts(state => state.finishWorkout);
+  const addExercise = useWorkouts(state => state.addExercise);
+
+  if (!currentWorkout) {
+    return <Redirect href="/" />;
+  }
 
   return (
     <>
@@ -17,7 +24,7 @@ export default function CurrentWorkoutScreen() {
         options={{
           headerRight: () => (
             <CustomButton
-              onPress={() => console.warn('Finish workout')}
+              onPress={finishWorkout}
               title="Finish"
               style={{ padding: 7, paddingHorizontal: 15, width: 'auto' }}
             />
@@ -27,19 +34,14 @@ export default function CurrentWorkoutScreen() {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
-        keyboardVerticalOffset={headerHeight}
-      >
+        keyboardVerticalOffset={headerHeight}>
         <FlatList
-          data={[1, 2, 3]}
+          data={currentWorkout.exercises}
           contentContainerStyle={{ gap: 10, padding: 10 }}
-          renderItem={() => <WorkoutExerciseItem />}
+          renderItem={({ item }) => <WorkoutExerciseItem exercise={item} />}
           ListHeaderComponent={<WorkoutHeader />}
           ListFooterComponent={
-            <SelectExerciseModal
-              onSelectExercise={(name) =>
-                console.warn('Exercise seleted: ', name)
-              }
-            />
+            <SelectExerciseModal onSelectExercise={addExercise} />
           }
         />
       </KeyboardAvoidingView>
